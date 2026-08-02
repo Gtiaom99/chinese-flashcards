@@ -7,10 +7,22 @@ Webapp locale e **gratis** per studiare frasi di viaggio:
 - Ripasso semplice tipo Anki (Di nuovo / Difficile / Bene / Facile)
 - Progressi salvati in `localStorage` (solo su questo browser)
 
-## Come aprirla
+## Usa dal telefono (online)
 
-1. Apri la cartella `chinese-flashcards`
-2. Fai doppio clic su `index.html`  
+**App live (GitHub Pages):**  
+https://gtiaom99.github.io/chinese-flashcards/
+
+Apri il link in Chrome (Android) o Safari (iPhone). Aggiungi a Home se vuoi un’icona.
+
+## Repository GitHub
+
+- Repo: https://github.com/Gtiaom99/chinese-flashcards  
+- Download ZIP: https://github.com/Gtiaom99/chinese-flashcards/archive/refs/heads/main.zip  
+
+## Come aprirla in locale
+
+1. Scarica o clona il repo
+2. Apri `index.html`  
    oppure, da terminale nella cartella:
 
 ```bash
