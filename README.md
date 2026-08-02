@@ -12,7 +12,16 @@ Webapp locale e **gratis** per studiare frasi di viaggio:
 **App live (GitHub Pages):**  
 https://gtiaom99.github.io/chinese-flashcards/
 
-Apri il link in Chrome (Android) o Safari (iPhone). Aggiungi a Home se vuoi un’icona.
+Apri il link in Chrome (Android) o Safari (iPhone).
+
+### Installa sul telefono (icona home)
+
+Icona app: carattere **汉** su sfondo scuro (PWA).
+
+- **Android (Chrome):** menu ⋮ → **Installa app** / **Aggiungi a Home**
+- **iPhone (Safari):** Condividi → **Aggiungi a Home**
+
+Dopo l’installazione vedrai l’icona “Cinese” con il carattere 汉.
 
 ## Repository GitHub
 

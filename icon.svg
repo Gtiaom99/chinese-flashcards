@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cinese in viaggio">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#281c3a"/>
+      <stop offset="100%" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="46%" r="42%">
+      <stop offset="0%" stop-color="#e85d4c" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#e85d4c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="236" r="170" fill="url(#glow)"/>
+  <rect x="48" y="48" width="416" height="416" rx="92" fill="none" stroke="#e85d4c" stroke-width="8" opacity="0.85"/>
+  <circle cx="400" cy="112" r="36" fill="none" stroke="#3d9cfd" stroke-width="7" opacity="0.75"/>
+  <text x="256" y="290" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, Noto Sans SC, sans-serif" font-size="250" font-weight="700" fill="#fffaf6">汉</text>
+  <rect x="200" y="400" width="112" height="12" rx="6" fill="#3d9cfd"/>
+</svg>
