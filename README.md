@@ -3,6 +3,7 @@
 Webapp locale e **gratis** per studiare frasi di viaggio:
 
 - **Italiano** / **Cinese** / **Pinyin**
+- **Tocca una parola** per vederne il significato (come HelloChinese)
 - **Audio** con la sintesi vocale del browser (nessuna API a pagamento)
 - Ripasso semplice tipo Anki (Di nuovo / Difficile / Bene / Facile)
 - Progressi salvati in `localStorage` (solo su questo browser)
@@ -77,7 +78,8 @@ Su telefono (Chrome Android / Safari iOS) di solito le voci cinesi ci sono già.
 2. Leggi l’italiano, prova a dirlo in cinese
 3. Tocca la carta (o “Mostra risposta”)
 4. Premi **Ascolta** / **Lento** e ripeti ad alta voce
-5. Valuta la carta
+5. Tocca ogni parola cinese: compare pinyin + italiano di quella parola
+6. Valuta la carta
 
 Scorciatoie tastiera:
 
@@ -98,7 +100,10 @@ Scorciatoie tastiera:
 In `cards.js`, aggiungi oggetti così:
 
 ```js
-{ id: "x99", cat: "cibo", it: "Acqua frizzante", zh: "气泡水", py: "qìpào shuǐ" },
+{ id: "x99", cat: "cibo", it: "Acqua frizzante", zh: "气泡水", py: "qìpào shuǐ",
+  words: [w("气泡水", "qìpào shuǐ", "acqua frizzante")] },
 ```
+
+`w(cinese, pinyin, italiano)` è definito in cima a `cards.js`. Per la punteggiatura usa `p("？")`.
 
 Poi ricarica la pagina.

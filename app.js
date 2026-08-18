@@ -13,9 +13,11 @@
     queue: [],
     index: 0,
     flipped: false,
+    selectedWord: -1,
     progress: loadProgress(),
     settings: loadSettings(),
     voices: { zh: [], it: [] },
+    deckGloss: { id: null, i: -1 },
   };
 
   function defaultProgress() {
@@ -86,6 +88,7 @@
     state.queue = due.length ? [...due, ...later] : shuffle([...cards]);
     state.index = 0;
     state.flipped = false;
+    state.selectedWord = -1;
   }
 
   function shuffle(arr) {
@@ -154,6 +157,7 @@
       buildQueue();
     }
     state.flipped = false;
+    state.selectedWord = -1;
     renderCard();
     updateStats();
   }
@@ -278,6 +282,68 @@
     speak(text, { lang: "zh", slow });
   }
 
+  function isPunct(tok) {
+    return !tok || (!tok.py && !tok.it);
+  }
+
+  function renderWordLine(container, card, selected, onTap) {
+    container.innerHTML = "";
+    const words = card.words;
+    if (!words || !words.length) {
+      container.classList.remove("zh-line");
+      container.textContent = card.zh;
+      return;
+    }
+    container.classList.add("zh-line");
+    words.forEach((tok, i) => {
+      if (isPunct(tok)) {
+        const span = document.createElement("span");
+        span.className = "zh-punct";
+        span.textContent = tok.zh;
+        container.appendChild(span);
+        return;
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "zh-word" + (i === selected ? " is-on" : "");
+      btn.dataset.i = String(i);
+      btn.setAttribute("aria-label", `${tok.zh}, ${tok.py}, ${tok.it}`);
+      const py = document.createElement("span");
+      py.className = "zh-word-py";
+      py.textContent = tok.py;
+      const han = document.createElement("span");
+      han.className = "zh-word-han";
+      han.textContent = tok.zh;
+      btn.appendChild(py);
+      btn.appendChild(han);
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        onTap(i);
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function fillGloss(rootHan, rootPy, rootIt, tok) {
+    rootHan.textContent = tok.zh;
+    rootPy.textContent = tok.py;
+    rootIt.textContent = tok.it;
+  }
+
+  function speakWord(tok) {
+    if (!tok || isPunct(tok)) return;
+    const text = String(tok.zh).replace(/……/g, "").replace(/…/g, "").trim();
+    if (text) speak(text, { lang: "zh" });
+  }
+
+  function selectStudyWord(i) {
+    const card = currentCard();
+    if (!card || !card.words || !card.words[i] || isPunct(card.words[i])) return;
+    state.selectedWord = i;
+    renderCard();
+    speakWord(card.words[i]);
+  }
+
   // —— Render ——
   function renderCard() {
     const card = currentCard();
@@ -300,6 +366,7 @@
     const backIt = $("#back-it");
     const frontFace = $(".card-front");
     const backFace = $(".card-back");
+    const flashcard = $("#flashcard");
 
     if (dir === "it-zh") {
       frontLabel.textContent = "Italiano";
@@ -311,18 +378,37 @@
       front.classList.add("zh");
     }
 
-    backZh.textContent = card.zh;
+    renderWordLine(backZh, card, state.selectedWord, selectStudyWord);
     backPy.textContent = card.py;
+    const hasWords = card.words && card.words.some((t) => !isPunct(t));
+    backPy.classList.toggle("hidden", !!hasWords);
     backIt.textContent = card.it;
+
+    const tok =
+      state.selectedWord >= 0 && card.words
+        ? card.words[state.selectedWord]
+        : null;
+    const gloss = $("#word-gloss");
+    const hint = $("#word-hint");
+    if (tok && !isPunct(tok)) {
+      gloss.classList.remove("hidden");
+      hint.classList.add("hidden");
+      fillGloss($("#gloss-han"), $("#gloss-py"), $("#gloss-it"), tok);
+    } else {
+      gloss.classList.add("hidden");
+      hint.classList.toggle("hidden", !hasWords);
+    }
 
     if (state.flipped) {
       frontFace.classList.add("hidden");
       backFace.classList.remove("hidden");
+      flashcard.classList.remove("is-front");
       $("#grade-row").classList.remove("hidden");
       $("#flip-row").classList.add("hidden");
     } else {
       frontFace.classList.remove("hidden");
       backFace.classList.add("hidden");
+      flashcard.classList.add("is-front");
       $("#grade-row").classList.add("hidden");
       $("#flip-row").classList.remove("hidden");
     }
@@ -356,36 +442,73 @@
     sel.value = state.category;
   }
 
+  function cardMatchesQuery(c, q) {
+    if (
+      c.it.toLowerCase().includes(q) ||
+      c.zh.includes(q) ||
+      c.py.toLowerCase().includes(q) ||
+      (CAT_LABELS[c.cat] || "").toLowerCase().includes(q)
+    ) {
+      return true;
+    }
+    return (c.words || []).some(
+      (t) =>
+        (t.it && t.it.toLowerCase().includes(q)) ||
+        (t.py && t.py.toLowerCase().includes(q)) ||
+        (t.zh && t.zh.includes(q))
+    );
+  }
+
   function renderDeckList() {
     const q = ($("#deck-search").value || "").trim().toLowerCase();
     let list = [...CARDS];
-    if (q) {
-      list = list.filter(
-        (c) =>
-          c.it.toLowerCase().includes(q) ||
-          c.zh.includes(q) ||
-          c.py.toLowerCase().includes(q) ||
-          (CAT_LABELS[c.cat] || "").toLowerCase().includes(q)
-      );
-    }
+    if (q) list = list.filter((c) => cardMatchesQuery(c, q));
     $("#deck-count").textContent = `${list.length} frasi`;
+    const y = window.scrollY;
     const ul = $("#deck-list");
     ul.innerHTML = "";
     for (const c of list) {
       const li = document.createElement("li");
       li.className = "deck-item";
+      const selected =
+        state.deckGloss.id === c.id ? state.deckGloss.i : -1;
+      const tok =
+        selected >= 0 && c.words && c.words[selected] && !isPunct(c.words[selected])
+          ? c.words[selected]
+          : null;
+
       li.innerHTML = `
         <div class="it">${escapeHtml(c.it)}</div>
-        <div class="zh">${escapeHtml(c.zh)}</div>
+        <div class="zh"></div>
         <div class="py">${escapeHtml(c.py)}</div>
         <div class="cat">${escapeHtml(CAT_LABELS[c.cat] || c.cat)}</div>
         <button type="button" class="speak-mini" title="Ascolta" aria-label="Ascolta ${escapeHtml(c.zh)}">🔊</button>
+        ${
+          tok
+            ? `<div class="word-gloss">
+                <div class="word-gloss-top">
+                  <div>
+                    <div class="word-gloss-han">${escapeHtml(tok.zh)}</div>
+                    <div class="word-gloss-py">${escapeHtml(tok.py)}</div>
+                  </div>
+                </div>
+                <p class="word-gloss-it">${escapeHtml(tok.it)}</p>
+              </div>`
+            : ""
+        }
       `;
+      renderWordLine(li.querySelector(".zh"), c, selected, (i) => {
+        const again = state.deckGloss.id === c.id && state.deckGloss.i === i;
+        state.deckGloss = again ? { id: null, i: -1 } : { id: c.id, i };
+        if (!again) speakWord(c.words[i]);
+        renderDeckList();
+      });
       li.querySelector(".speak-mini").addEventListener("click", () => {
         speak(c.zh.replace(/……/g, "").replace(/…/g, ""), { lang: "zh" });
       });
       ul.appendChild(li);
     }
+    window.scrollTo(0, y);
   }
 
   function escapeHtml(s) {
@@ -422,20 +545,38 @@
     $("#direction").addEventListener("change", (e) => {
       state.direction = e.target.value;
       state.flipped = false;
+      state.selectedWord = -1;
       renderCard();
     });
 
     const flip = () => {
       if (!currentCard()) return;
       state.flipped = !state.flipped;
+      if (!state.flipped) state.selectedWord = -1;
       renderCard();
       if (state.flipped) speakCurrent(false);
     };
 
-    $("#flashcard").addEventListener("click", flip);
+    $("#flashcard").addEventListener("click", (e) => {
+      if (e.target.closest(".zh-word, .word-gloss, #btn-speak-word")) return;
+      flip();
+    });
+    $("#flashcard").addEventListener("keydown", (e) => {
+      if (e.code === "Enter" && !state.flipped) {
+        e.preventDefault();
+        flip();
+      }
+    });
     $("#btn-flip").addEventListener("click", (e) => {
       e.stopPropagation();
       if (!state.flipped) flip();
+    });
+
+    $("#btn-speak-word").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const card = currentCard();
+      const tok = card && card.words && card.words[state.selectedWord];
+      speakWord(tok);
     });
 
     $("#btn-speak").addEventListener("click", () => speakCurrent(false));
