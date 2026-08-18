@@ -195,17 +195,17 @@ h1 {
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition: border-color 0.15s ease;
   width: 100%;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
-.flashcard.is-front:active {
-  transform: scale(0.99);
-}
-
+.flashcard:focus,
 .flashcard:focus-visible {
-  outline: 2px solid var(--accent-2);
-  outline-offset: 3px;
+  outline: none;
 }
 
 .card-label {
@@ -259,13 +259,14 @@ h1 {
   text-decoration-style: dotted;
   text-underline-offset: 0.18em;
   text-decoration-color: color-mix(in srgb, var(--accent-2) 70%, transparent);
-  -webkit-tap-highlight-color: color-mix(in srgb, var(--accent-2) 25%, transparent);
+  -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  outline: none;
 }
 
+.zh-word:focus,
 .zh-word:focus-visible {
-  outline: 2px solid var(--accent-2);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .zh-word.is-on {
@@ -350,6 +351,12 @@ h1 {
   flex-wrap: wrap;
 }
 
+.btn,
+.tab,
+.speak-mini {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .btn {
   border: 1px solid var(--border);
   background: var(--bg-elev);
@@ -361,6 +368,7 @@ h1 {
   cursor: pointer;
   flex: 1;
   min-width: 0;
+  outline: none;
 }
 
 .btn:active {

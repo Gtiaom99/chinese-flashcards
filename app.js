@@ -333,6 +333,11 @@
   function selectStudyWord(i) {
     const card = currentCard();
     if (!card || !card.words || !card.words[i] || isPunct(card.words[i])) return;
+    if (state.selectedWord === i) {
+      state.selectedWord = -1;
+      renderCard();
+      return;
+    }
     state.selectedWord = i;
     renderCard();
     speakWord(card.words[i]);
