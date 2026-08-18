@@ -78,7 +78,7 @@ Su telefono (Chrome Android / Safari iOS) di solito le voci cinesi ci sono già.
 2. Leggi l’italiano, prova a dirlo in cinese
 3. Tocca la carta (o “Mostra risposta”)
 4. Premi **Ascolta** / **Lento** e ripeti ad alta voce
-5. Tocca ogni parola cinese: compare pinyin + italiano di quella parola
+5. Tocca una parola cinese: sotto compare il significato di quella parola
 6. Valuta la carta
 
 Scorciatoie tastiera:

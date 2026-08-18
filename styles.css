@@ -234,9 +234,13 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-end;
-  gap: 0.2rem 0.45rem;
-  margin: 0.45rem 0 0.2rem;
+  align-items: center;
+  gap: 0.15rem 0.2rem;
+  margin: 0.4rem 0 0.15rem;
+  font-family: var(--font-zh);
+  font-size: 2.1rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .zh-word {
@@ -245,15 +249,18 @@ h1 {
   background: transparent;
   color: inherit;
   font: inherit;
-  font-family: var(--font-zh);
+  font-family: inherit;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.12rem;
-  padding: 0.15rem 0.28rem 0.28rem;
-  border-radius: 10px;
-  border-bottom: 2px dotted color-mix(in srgb, var(--accent-2) 60%, transparent);
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.2rem 0.15rem;
+  border-radius: 8px;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--accent-2) 70%, transparent);
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--accent-2) 25%, transparent);
+  touch-action: manipulation;
 }
 
 .zh-word:focus-visible {
@@ -263,85 +270,56 @@ h1 {
 
 .zh-word.is-on {
   background: color-mix(in srgb, var(--accent-2) 18%, transparent);
-  border-bottom-style: solid;
-  border-bottom-color: var(--accent-2);
-}
-
-.zh-word-py {
-  font-family: var(--font);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--accent-2);
-  line-height: 1.1;
-}
-
-.zh-word-han {
-  font-size: 1.85rem;
-  font-weight: 600;
-  line-height: 1.15;
+  text-decoration-style: solid;
+  text-decoration-color: var(--accent-2);
 }
 
 .zh-punct {
-  font-family: var(--font-zh);
-  font-size: 1.55rem;
-  line-height: 1.15;
-  padding-bottom: 0.28rem;
+  font-family: inherit;
   color: var(--muted);
   white-space: pre;
 }
 
-.word-hint {
-  margin: 0.55rem 0 0;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
 .word-gloss {
-  margin-top: 0.7rem;
-  padding: 0.7rem 0.85rem;
+  margin-top: 0.65rem;
+  padding: 0.45rem 0.55rem;
   border-radius: 12px;
   background: color-mix(in srgb, var(--accent-2) 12%, var(--bg-elev));
   border: 1px solid color-mix(in srgb, var(--accent-2) 38%, var(--border));
-  text-align: left;
-}
-
-.word-gloss-top {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  text-align: left;
 }
 
 .word-gloss-han {
   font-family: var(--font-zh);
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  line-height: 1.2;
 }
 
 .word-gloss-py {
-  margin-top: 0.1rem;
   color: var(--accent-2);
   font-weight: 600;
-  font-size: 1rem;
 }
 
 .word-gloss-it {
-  margin: 0.35rem 0 0;
   color: var(--text);
-  font-size: 1.02rem;
+  flex: 1 1 auto;
 }
 
 .word-gloss .speak-mini {
   flex-shrink: 0;
-  width: 2.4rem;
-  height: 2.4rem;
+  margin-left: auto;
+  width: 2.2rem;
+  height: 2.2rem;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .card-pinyin {
@@ -519,15 +497,12 @@ h1 {
 .deck-item .zh-line {
   justify-content: flex-start;
   margin: 0.15rem 0 0;
-  gap: 0.15rem 0.35rem;
-}
-
-.deck-item .zh-word-han {
   font-size: 1.25rem;
 }
 
-.deck-item .zh-word-py {
-  font-size: 0.65rem;
+.deck-item .zh-word {
+  min-height: 36px;
+  min-width: 36px;
 }
 
 .deck-item .word-gloss {
@@ -578,7 +553,7 @@ h1 {
     font-size: 2.35rem;
   }
 
-  .zh-word-han {
-    font-size: 2.05rem;
+  .zh-line {
+    font-size: 2.35rem;
   }
 }

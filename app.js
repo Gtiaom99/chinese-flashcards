@@ -308,15 +308,9 @@
       btn.className = "zh-word" + (i === selected ? " is-on" : "");
       btn.dataset.i = String(i);
       btn.setAttribute("aria-label", `${tok.zh}, ${tok.py}, ${tok.it}`);
-      const py = document.createElement("span");
-      py.className = "zh-word-py";
-      py.textContent = tok.py;
-      const han = document.createElement("span");
-      han.className = "zh-word-han";
-      han.textContent = tok.zh;
-      btn.appendChild(py);
-      btn.appendChild(han);
-      btn.addEventListener("click", (e) => {
+      btn.textContent = tok.zh;
+      btn.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
         e.stopPropagation();
         onTap(i);
       });
@@ -380,8 +374,7 @@
 
     renderWordLine(backZh, card, state.selectedWord, selectStudyWord);
     backPy.textContent = card.py;
-    const hasWords = card.words && card.words.some((t) => !isPunct(t));
-    backPy.classList.toggle("hidden", !!hasWords);
+    backPy.classList.remove("hidden");
     backIt.textContent = card.it;
 
     const tok =
@@ -389,14 +382,11 @@
         ? card.words[state.selectedWord]
         : null;
     const gloss = $("#word-gloss");
-    const hint = $("#word-hint");
     if (tok && !isPunct(tok)) {
       gloss.classList.remove("hidden");
-      hint.classList.add("hidden");
       fillGloss($("#gloss-han"), $("#gloss-py"), $("#gloss-it"), tok);
     } else {
       gloss.classList.add("hidden");
-      hint.classList.toggle("hidden", !hasWords);
     }
 
     if (state.flipped) {
@@ -486,13 +476,9 @@
         ${
           tok
             ? `<div class="word-gloss">
-                <div class="word-gloss-top">
-                  <div>
-                    <div class="word-gloss-han">${escapeHtml(tok.zh)}</div>
-                    <div class="word-gloss-py">${escapeHtml(tok.py)}</div>
-                  </div>
-                </div>
-                <p class="word-gloss-it">${escapeHtml(tok.it)}</p>
+                <span class="word-gloss-han">${escapeHtml(tok.zh)}</span>
+                <span class="word-gloss-py">${escapeHtml(tok.py)}</span>
+                <span class="word-gloss-it">${escapeHtml(tok.it)}</span>
               </div>`
             : ""
         }
@@ -558,6 +544,7 @@
     };
 
     $("#flashcard").addEventListener("click", (e) => {
+      if (state.flipped) return;
       if (e.target.closest(".zh-word, .word-gloss, #btn-speak-word")) return;
       flip();
     });
