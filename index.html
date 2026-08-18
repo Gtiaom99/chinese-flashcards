@@ -15,7 +15,7 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=6" />
 </head>
 <body>
   <div class="app">
@@ -175,12 +175,18 @@
     </footer>
   </div>
 
-  <script src="cards.js"></script>
-  <script src="app.js"></script>
+  <script src="cards.js?v=6"></script>
+  <script src="app.js?v=6"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
+        navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).catch(() => {});
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (!window.__reloadedForSw) {
+            window.__reloadedForSw = true;
+            location.reload();
+          }
+        });
       });
     }
   </script>

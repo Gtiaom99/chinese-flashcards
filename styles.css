@@ -36,6 +36,17 @@ body {
 
 body {
   line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+.flashcard,
+.zh-word,
+.btn,
+.tab,
+.speak-mini {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app {
@@ -270,7 +281,7 @@ h1 {
 }
 
 .zh-word.is-on {
-  background: color-mix(in srgb, var(--accent-2) 18%, transparent);
+  background: rgba(61, 156, 253, 0.14);
   text-decoration-style: solid;
   text-decoration-color: var(--accent-2);
 }

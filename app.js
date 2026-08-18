@@ -330,16 +330,34 @@
     if (text) speak(text, { lang: "zh" });
   }
 
+  function applyWordSelection() {
+    $$("#back-zh .zh-word").forEach((btn) => {
+      btn.classList.toggle("is-on", Number(btn.dataset.i) === state.selectedWord);
+    });
+    const card = currentCard();
+    const tok =
+      card && card.words && state.selectedWord >= 0
+        ? card.words[state.selectedWord]
+        : null;
+    const gloss = $("#word-gloss");
+    if (tok && !isPunct(tok)) {
+      gloss.classList.remove("hidden");
+      fillGloss($("#gloss-han"), $("#gloss-py"), $("#gloss-it"), tok);
+    } else {
+      gloss.classList.add("hidden");
+    }
+  }
+
   function selectStudyWord(i) {
     const card = currentCard();
     if (!card || !card.words || !card.words[i] || isPunct(card.words[i])) return;
     if (state.selectedWord === i) {
       state.selectedWord = -1;
-      renderCard();
+      applyWordSelection();
       return;
     }
     state.selectedWord = i;
-    renderCard();
+    applyWordSelection();
     speakWord(card.words[i]);
   }
 

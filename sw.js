@@ -1,4 +1,4 @@
-const CACHE = "cinese-viaggio-v5";
+const CACHE = "cinese-viaggio-v6";
 const ASSETS = [
   "./",
   "./index.html",
@@ -36,7 +36,7 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: "no-store" })
       .then((res) => {
         if (res && res.ok) {
           const copy = res.clone();
